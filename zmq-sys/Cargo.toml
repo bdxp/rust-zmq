@@ -23,4 +23,4 @@ system-deps = "6"
 zeromq-src = "0.3"
 
 [package.metadata.system-deps]
-libzmq = "4.3.5"
+libzmq = "4.3.4"
