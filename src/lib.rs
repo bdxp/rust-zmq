@@ -587,17 +587,19 @@ macro_rules! sockopts {
 /// `Into<Message>` should be implemented instead.
 ///
 pub trait Sendable {
-    fn send(self, socket: &Socket, flags: i32) -> Result<()>;
+    fn send(self, socket: &Socket, flags: i32) -> Result<i32>;
 }
 
 impl<T> Sendable for T
 where
     T: Into<Message>,
 {
-    fn send(self, socket: &Socket, flags: i32) -> Result<()> {
+    fn send(self, socket: &Socket, flags: i32) -> Result<i32> {
         let mut msg = self.into();
-        zmq_try!(unsafe { zmq_sys::zmq_msg_send(msg_ptr(&mut msg), socket.sock, flags as c_int) });
-        Ok(())
+        let rc = zmq_try!(unsafe {
+            zmq_sys::zmq_msg_send(msg_ptr(&mut msg), socket.sock, flags as c_int)
+        });
+        Ok(rc as i32)
     }
 }
 
@@ -681,7 +683,7 @@ impl Socket {
     ///
     /// Due to the provided `From` implementations, this works for
     /// `&[u8]`, `Vec<u8>` and `&str` `Message` itself.
-    pub fn send<T>(&self, data: T, flags: i32) -> Result<()>
+    pub fn send<T>(&self, data: T, flags: i32) -> Result<i32>
     where
         T: Sendable,
     {
@@ -690,16 +692,16 @@ impl Socket {
 
     /// Send a `Message` message.
     #[deprecated(since = "0.9.0", note = "Use `send` instead")]
-    pub fn send_msg(&self, msg: Message, flags: i32) -> Result<()> {
+    pub fn send_msg(&self, msg: Message, flags: i32) -> Result<i32> {
         self.send(msg, flags)
     }
 
     #[deprecated(since = "0.9.0", note = "Use `send` instead")]
-    pub fn send_str(&self, data: &str, flags: i32) -> Result<()> {
+    pub fn send_str(&self, data: &str, flags: i32) -> Result<i32> {
         self.send(data, flags)
     }
 
-    pub fn send_multipart<I, T>(&self, iter: I, flags: i32) -> Result<()>
+    pub fn send_multipart<I, T>(&self, iter: I, flags: i32) -> Result<i32>
     where
         I: IntoIterator<Item = T>,
         T: Into<Message>,
@@ -715,7 +717,7 @@ impl Socket {
         if let Some(last) = last_part {
             self.send(last.into(), flags)
         } else {
-            Ok(())
+            Ok(0)
         }
     }
 
