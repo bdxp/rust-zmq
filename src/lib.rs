@@ -1130,6 +1130,23 @@ pub fn poll(items: &mut [PollItem], timeout: i64) -> Result<i32> {
     Ok(rc as i32)
 }
 
+pub struct Poller {
+    _poller: *mut c_void,
+}
+
+pub fn poller_new() -> Result<Poller> {
+    let poller = unsafe { zmq_sys::zmq_poller_new() };
+    if poller.is_null() {
+        return Err(crate::errno_to_error());
+    }
+    Ok(Poller { _poller: poller })
+}
+
+pub fn poller_destroy(poller: &mut Poller) -> Result<()> {
+    zmq_try!(unsafe { zmq_sys::zmq_poller_destroy(&mut poller._poller) });
+    Ok(())
+}
+
 /// Start a 0MQ proxy in the current thread.
 ///
 /// A proxy connects a frontend socket with a backend socket, where the exact
