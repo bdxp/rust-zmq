@@ -1367,3 +1367,17 @@ pub fn z85_decode(data: &str) -> result::Result<Vec<u8>, DecodeError> {
 
     Ok(dest)
 }
+
+pub fn zmq_msg_set_routing_id(msg: &mut Message, routing_id: u32) -> Result<i32> {
+    Ok(zmq_try!(unsafe {
+        zmq_sys::zmq_msg_set_routing_id(msg_ptr(msg), routing_id)
+    }))
+}
+
+pub fn msg_routing_id(msg: &mut Message) -> Option<u32> {
+    let rc = unsafe { zmq_sys::zmq_msg_routing_id(msg_ptr(msg)) };
+    match rc {
+        0 => None,
+        _ => Some(rc),
+    }
+}
