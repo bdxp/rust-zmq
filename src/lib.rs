@@ -33,8 +33,8 @@ macro_rules! zmq_try {
 mod message;
 mod sockopt;
 
-use crate::message::msg_ptr;
 pub use crate::message::Message;
+use crate::message::{msg_ptr, msg_ptr_const_to_mut};
 pub use crate::SocketType::*;
 
 /// `zmq`-specific Result type.
@@ -1374,8 +1374,9 @@ pub fn zmq_msg_set_routing_id(msg: &mut Message, routing_id: u32) -> Result<i32>
     }))
 }
 
-pub fn msg_routing_id(msg: &mut Message) -> Option<u32> {
-    let rc = unsafe { zmq_sys::zmq_msg_routing_id(msg_ptr(msg)) };
+pub fn msg_routing_id(msg: &Message) -> Option<u32> {
+    let rc = unsafe { zmq_sys::zmq_msg_routing_id(msg_ptr_const_to_mut(msg)) };
+    std::sync::atomic::fence(std::sync::atomic::Ordering::Acquire);
     match rc {
         0 => None,
         _ => Some(rc),

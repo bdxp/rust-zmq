@@ -259,3 +259,7 @@ where
 pub fn msg_ptr(msg: &mut Message) -> *mut zmq_sys::zmq_msg_t {
     &mut msg.msg
 }
+
+pub fn msg_ptr_const_to_mut(msg: &Message) -> *mut zmq_sys::zmq_msg_t {
+    &msg.msg as *const _ as *mut _
+}
