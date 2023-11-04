@@ -21,6 +21,7 @@ the `zmq.h` header file. First remove sigset (apply `zmq.h.patch`),
 then using the following command:
 
 ```sh
+cargo install bindgen-cli
 BINDGEN_EXTRA_CLANG_ARGS='-DZMQ_BUILD_DRAFT_API' bindgen --verbose --with-derive-default --allowlist-function "^zmq_.*" --allowlist-type "^zmq_.*" --allowlist-var "^ZMQ_.*" include/zmq.h -o ffi.rs
 ```
 
