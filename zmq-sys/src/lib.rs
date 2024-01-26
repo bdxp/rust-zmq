@@ -233,6 +233,20 @@ pub use crate::ffi::{
     zmq_z85_encode,
     zmq_z85_decode,
     zmq_curve_keypair,
+    zmq_poller_new,
+    zmq_poller_destroy,
+    zmq_poller_size,
+    zmq_poller_add,
+    zmq_poller_modify,
+    zmq_poller_remove,
+    zmq_poller_wait,
+    zmq_poller_wait_all,
+    zmq_poller_fd,
+    zmq_poller_add_fd,
+    zmq_poller_modify_fd,
+    zmq_poller_remove_fd,
+    zmq_msg_set_routing_id,
+    zmq_msg_routing_id,
 };
 
 #[allow(non_camel_case_types)]
