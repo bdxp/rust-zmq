@@ -22,6 +22,7 @@ libc = "0.2.15"
 system-deps = "6"
 # zeromq-src = "0.3"
 zeromq-src = { git = "https://github.com/bdxp/zeromq-src-rs.git", branch = "up" }
+# zeromq-src = { path = "../../zeromq-src-rs" }
 
 [package.metadata.system-deps]
 libzmq = "4.3.5"

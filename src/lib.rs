@@ -997,7 +997,7 @@ impl Socket {
     }
 
     /// Create a `PollItem` from the socket.
-    pub fn as_poll_item(&self, events: PollEvents) -> PollItem {
+    pub fn as_poll_item(&self, events: PollEvents) -> PollItem<'_> {
         PollItem {
             socket: self.sock,
             fd: 0,
