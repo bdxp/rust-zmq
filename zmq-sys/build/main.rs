@@ -7,6 +7,7 @@ pub fn configure() {
     // audited nor is ready for production](https://github.com/zeromq/libzmq/issues/3006),
     // we link against `libsodium` to enable `ZMQ_CURVE`.
     zeromq_src::Build::new()
+        .enable_draft(true)
         .with_libsodium(None)
         .build();
 }

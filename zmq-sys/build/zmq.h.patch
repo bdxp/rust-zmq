@@ -1,0 +1,22 @@
+diff --git a/include/zmq.h b/include/zmq.h
+index 3186cd6..a9e53ba 100644
+--- a/include/zmq.h
++++ b/include/zmq.h
+@@ -107,7 +107,7 @@ typedef unsigned __int8 uint8_t;
+ 
+ #if !defined _WIN32
+ // needed for sigset_t definition in zmq_ppoll
+-#include <signal.h>
++// #include <signal.h>
+ #endif
+ 
+ //  32-bit AIX's pollfd struct members are called reqevents and rtnevents so it
+@@ -789,7 +789,7 @@ ZMQ_EXPORT int zmq_socket_monitor_versioned (
+   void *s_, const char *addr_, uint64_t events_, int event_version_, int type_);
+ ZMQ_EXPORT int zmq_socket_monitor_pipes_stats (void *s);
+ 
+-#if !defined _WIN32
++#if !defined _WIN32 && false
+ ZMQ_EXPORT int zmq_ppoll (zmq_pollitem_t *items_,
+                           int nitems_,
+                           long timeout_,
